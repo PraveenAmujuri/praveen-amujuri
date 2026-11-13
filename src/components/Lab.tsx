@@ -31,8 +31,10 @@ export default function Lab() {
 
     let animId: number;
     let t = 0;
+    let isVisible = false;
 
     const render = () => {
+      if (!isVisible) return;
       t += 0.05;
       ctx.fillStyle = "#101113";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -60,8 +62,25 @@ export default function Lab() {
       animId = requestAnimationFrame(render);
     };
 
-    render();
-    return () => cancelAnimationFrame(animId);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          animId = requestAnimationFrame(render);
+        } else if (!isVisible && wasVisible) {
+          cancelAnimationFrame(animId);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(canvas);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(animId);
+    };
   }, [inputText]);
 
   // Run Vision neural waveform canvas
@@ -73,8 +92,10 @@ export default function Lab() {
 
     let animId: number;
     let t = 0;
+    let isVisible = false;
 
     const render = () => {
+      if (!isVisible) return;
       t += 0.04;
       ctx.fillStyle = "#101113";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -94,8 +115,25 @@ export default function Lab() {
       animId = requestAnimationFrame(render);
     };
 
-    render();
-    return () => cancelAnimationFrame(animId);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          animId = requestAnimationFrame(render);
+        } else if (!isVisible && wasVisible) {
+          cancelAnimationFrame(animId);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(canvas);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(animId);
+    };
   }, []);
 
   // Run Motion kinetic Lissajous canvas
@@ -107,8 +145,10 @@ export default function Lab() {
 
     let animId: number;
     let t = 0;
+    let isVisible = false;
 
     const render = () => {
+      if (!isVisible) return;
       t += 0.03;
       ctx.fillStyle = "#101113";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -138,8 +178,25 @@ export default function Lab() {
       animId = requestAnimationFrame(render);
     };
 
-    render();
-    return () => cancelAnimationFrame(animId);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          animId = requestAnimationFrame(render);
+        } else if (!isVisible && wasVisible) {
+          cancelAnimationFrame(animId);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(canvas);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(animId);
+    };
   }, []);
 
   return (

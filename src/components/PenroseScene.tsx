@@ -222,9 +222,11 @@ export default function PenroseScene({ sectionRef, onFrameUpdate }: PenroseScene
     targetScrollProgress = calculateProgress();
     currentScrollProgress = targetScrollProgress;
 
+    let isVisible = true;
     let animFrameId: number;
 
     const renderLoop = () => {
+      if (!isVisible) return;
       animFrameId = requestAnimationFrame(renderLoop);
 
       // Continuously read scroll position to guarantee zero lag even during fast scrolls
@@ -286,9 +288,27 @@ export default function PenroseScene({ sectionRef, onFrameUpdate }: PenroseScene
       renderer.render(scene, camera);
     };
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          animFrameId = requestAnimationFrame(renderLoop);
+        } else if (!isVisible && wasVisible) {
+          cancelAnimationFrame(animFrameId);
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
     renderLoop();
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(animFrameId);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("scroll", onScroll);

@@ -1,41 +1,33 @@
 import type { Metadata } from "next";
-import { Syne, Instrument_Sans, Martian_Mono, Space_Grotesk } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const syne = Syne({
+const syne = localFont({
+  src: "../../public/fonts/Syne.woff2",
   variable: "--font-syne",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
+  fallback: ["Arial", "sans-serif"],
 });
 
-const instrumentSans = Instrument_Sans({
+const instrumentSans = localFont({
+  src: "../../public/fonts/InstrumentSans.woff2",
   variable: "--font-instrument",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
+  fallback: ["system-ui", "-apple-system", "sans-serif"],
 });
 
-const martianMono = Martian_Mono({
-  variable: "--font-martian",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
+const spaceGrotesk = localFont({
+  src: "../../public/fonts/SpaceGrotesk.woff2",
   variable: "--font-space",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
+  fallback: ["Arial", "sans-serif"],
 });
 
 const fiveYears = localFont({
   src: "../../public/fonts/FiveYearsLater.woff",
   variable: "--font-five",
   display: "swap",
-  fallback: ["Syne", "Arial", "sans-serif"],
+  fallback: ["Arial", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -73,7 +65,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${fiveYears.variable} ${instrumentSans.variable} ${martianMono.variable} ${spaceGrotesk.variable} antialiased`}
+      className={`${syne.variable} ${fiveYears.variable} ${instrumentSans.variable} ${spaceGrotesk.variable} antialiased`}
     >
       <body className="min-h-screen bg-[#f4f5f7] text-[#101113] selection:bg-[#0037ff] selection:text-[#f4f5f7]">
         <div className="grain-overlay" aria-hidden="true" />

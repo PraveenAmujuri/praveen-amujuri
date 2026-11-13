@@ -18,7 +18,10 @@ export default function Instrument() {
     let animId: number;
     let frame = 0;
 
+    let isVisible = false;
+
     const render = () => {
+      if (!isVisible) return;
       frame++;
       const w = canvas.width;
       const h = canvas.height;
@@ -112,8 +115,25 @@ export default function Instrument() {
       animId = requestAnimationFrame(render);
     };
 
-    render();
-    return () => cancelAnimationFrame(animId);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisible;
+        isVisible = entry.isIntersecting;
+        if (isVisible && !wasVisible) {
+          animId = requestAnimationFrame(render);
+        } else if (!isVisible && wasVisible) {
+          cancelAnimationFrame(animId);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(canvas);
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(animId);
+    };
   }, [activeMode]);
 
   const modes: EffectMode[] = [
